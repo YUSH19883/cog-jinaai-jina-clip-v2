@@ -2,6 +2,9 @@
 #
 # https://docs.docker.com/engine/reference/builder/#dockerignore-file
 
+# Replicate
+/models/*
+
 # Exclude Git files
 **/.git
 **/.github
@@ -15,20 +18,3 @@ __pycache__
 
 # Exclude Python virtual environment
 /venv
-
-# Replicate
-/model_cache/*
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.webp
-*.heic
-*.heif
-*.hevc
-*.h264
-*.mp4
-*.mov
-*.avi
-*.mkv
-*.flv

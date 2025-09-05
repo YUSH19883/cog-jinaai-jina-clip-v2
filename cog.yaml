@@ -6,20 +6,36 @@ build:
   gpu: true
 
   # a list of ubuntu apt packages to install
-  system_packages:
-    - "libgl1-mesa-glx"
-    - "libglib2.0-0"
+  # system_packages:
+  #   - "libgl1-mesa-glx"
+  #   - "libglib2.0-0"
 
   # python version in the form '3.11' or '3.11.4'
   python_version: "3.11"
 
-  # path to a Python requirements.txt file
-  python_requirements: requirements.txt
+  # a list of packages in the format <package-name>==<version>
+  python_packages:
+    - "torch==2.0.1"
+    - "torchvision==0.15.2"
+    - "transformers>=4.33.0"
+    - "numpy==1.24.3"
+    - "Pillow>=9.5.0"
+    - "huggingface-hub>=0.16.4"
+    - "timm>=0.9.0"
+    - "safetensors>=0.3.1"
+    - "einops>=0.6.1"
+    - "opencv-python-headless>=4.8.0"
+    - "scipy>=1.11.2"
+    - "ftfy>=6.1.1"
+    - "regex>=2023.8.8"
+    - "tqdm>=4.66.1"
 
   # commands run after the environment is setup
   run:
-  - curl -o /usr/local/bin/pget -L "https://github.com/replicate/pget/releases/latest/download/pget_$(uname -s)_$(uname -m)"
-  - chmod +x /usr/local/bin/pget
+    - curl -o /usr/local/bin/pget -L "https://github.com/replicate/pget/releases/download/v0.8.2/pget_linux_x86_64" && chmod +x /usr/local/bin/pget
+
+  #   - "echo env is ready!"
+  #   - "echo another command if needed"
 
 # predict.py defines how predictions are run on your model
 predict: "predict.py:Predictor"

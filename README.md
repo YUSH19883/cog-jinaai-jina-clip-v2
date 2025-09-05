@@ -1,147 +1,99 @@
-# Cog Template Repository
+# Jina CLIP v2 - Multimodal Embeddings
 
-This is a template repository for creating [Cog](https://github.com/replicate/cog) models that efficiently handle model weights with proper caching. It includes tools to upload model weights to Google Cloud Storage and generate download code for your `predict.py` file.
+A powerful multimodal embedding model that generates high-quality embeddings for both text and images using Jina AI's CLIP v2 architecture.
 
-[![Replicate](https://replicate.com/zsxkib/model-name/badge)](https://replicate.com/zsxkib/model-name)
+[![Replicate](https://replicate.com/zsxkib/jina-clip-v2/badge)](https://replicate.com/zsxkib/jina-clip-v2)
 
-## Getting Started
+## Overview
 
-To use this template for your own model:
+Jina CLIP v2 is a state-of-the-art multimodal embedding model that can process both text and images to generate dense vector representations. This implementation provides optimized inference on Replicate with support for Matryoshka representations, allowing you to choose embedding dimensions from 64 to 1024.
 
-1. Clone this repository
-2. Modify `predict.py` with your model's implementation
-3. Update `cog.yaml` with your model's dependencies
-4. Use `cache_manager.py` to upload and manage model weights
+### Key Features
 
-## Repository Structure
+- **Multimodal**: Process text, images, or both simultaneously
+- **Matryoshka Representations**: Flexible embedding dimensions (64-1024)
+- **Optimized Performance**: CUDA acceleration with normalized embeddings
+- **Multiple Output Formats**: Base64 encoded or raw array outputs
+- **High Token Limit**: Support for up to 8,192 text tokens
+- **Optimal Image Processing**: Best performance with 512x512 images
 
-- `predict.py`: The main model implementation file 
-- `cache_manager.py`: Script for uploading model weights to GCS and generating download code
-- `cog.yaml`: Cog configuration file that defines your model's environment
+## Inputs
 
-## Managing Model Weights with cache_manager.py
+- **`text`** (string, optional): Text content to embed (up to 8,192 tokens)
+- **`image`** (file, optional): Image file to embed (optimal size: 512x512px)
+- **`embedding_dim`** (integer, 64-1024, default: 64): Output embedding dimension using Matryoshka representations
+- **`output_format`** (string, default: "base64"): Choose between "base64" or "array" format
 
-A key feature of this template is the `cache_manager.py` script, which helps you:
+*Note: At least one input (text or image) must be provided. If both are provided, you'll get a list with [text_embedding, image_embedding].*
 
-1. Upload model weights to Google Cloud Storage (GCS)
-2. Generate code for downloading those weights in your `predict.py`
-3. Handle both individual files and directories efficiently
+## Outputs
 
-### Prerequisites for Using cache_manager.py
+The model returns embeddings in your chosen format:
+- **Single input**: Returns one embedding
+- **Both inputs**: Returns list of [text_embedding, image_embedding]
+- **Base64 format**: Compact string representation
+- **Array format**: Standard numerical arrays
 
-- Google Cloud SDK installed and configured (`gcloud` command)
-- Permission to upload to the specified GCS bucket (default: `gs://replicate-weights/`)
-- `tar` command available in your PATH
+## Usage Examples
 
-### Basic Usage
+Clone this repository and use `cog predict` to run the model locally:
 
+### Text Only
 ```bash
-python cache_manager.py --model-name your-model-name --local-dirs model_cache
+cog predict -i text="A beautiful sunset over the mountains" -i embedding_dim=256 -i output_format="array"
 ```
 
-This will:
-1. Find files and directories in the `model_cache` directory
-2. Create tar archives of each directory
-3. Upload both individual files and tar archives to GCS
-4. Generate code snippets for downloading the weights in your `predict.py`
-
-### Advanced Usage
-
+### Image Only  
 ```bash
-python cache_manager.py \
-    --model-name your-model-name \
-    --local-dirs model_cache weights \
-    --gcs-base-path gs://replicate-weights/ \
-    --cdn-base-url https://weights.replicate.delivery/default/ \
-    --keep-tars
+cog predict -i image=@my_image.jpg -i embedding_dim=512 -i output_format="base64"
 ```
 
-#### Parameters
+### Text + Image (Multimodal)
+```bash
+cog predict -i text="A beautiful sunset over the mountains" -i image=@sunset.jpg -i embedding_dim=128 -i output_format="array"
+```
+*Returns: [text_embedding, image_embedding]*
 
-- `--model-name`: Required. The name of your model (used in paths)
-- `--local-dirs`: Required. One or more local directories to process
-- `--gcs-base-path`: Optional. Base Google Cloud Storage path
-- `--cdn-base-url`: Optional. Base CDN URL
-- `--keep-tars`: Optional. Keep the generated .tar files locally after upload
+### Quick Start
+```bash
+# Clone and run
+git clone https://github.com/zsxkib/cog-jinaai-jina-clip-v2.git
+cd cog-jinaai-jina-clip-v2
+cog predict -i text="Hello world" -i embedding_dim=64
+```
 
-## Workflow Example
+## Model Details
 
-1. **Develop your model locally**:
-   ```bash
-   # Run your model once to download weights to model_cache
-   cog predict -i prompt="test"
-   ```
+This implementation is based on Jina AI's `jinaai/jina-clip-v2` model, featuring:
+- Vision encoder optimized for 512x512 images
+- Text encoder supporting up to 8,192 tokens
+- L2 normalized embeddings for better similarity computations
+- Efficient GPU inference with mixed precision
+- Matryoshka representation learning for flexible dimensions
 
-2. **Upload model weights**:
-   ```bash
-   python cache_manager.py --model-name your-model-name --local-dirs model_cache
-   ```
+## Performance Tips
 
-3. **Copy the generated code snippet** into your `predict.py`
+1. **Image Size**: Use 512x512 images for optimal performance
+2. **Batch Processing**: Process multiple items in separate API calls
+3. **Dimension Selection**: Choose the minimum dimension needed for your use case
+4. **Text Length**: Longer texts (up to 8,192 tokens) are supported but may take longer
 
-4. **Test that the model can download weights**:
-   ```bash
-   rm -rf model_cache
-   cog predict -i prompt="test"
-   ```
+## Use Cases
 
-## Example Implementation
-
-The template comes with a sample Stable Diffusion implementation in `predict.py` that demonstrates:
-
-- Setting up the model cache directory
-- Downloading weights from GCS with progress reporting
-- Setting environment variables for model caching
-- Random seed generation for reproducibility
-- Output format and quality options
-
-## Best Practices
-
-- **Environment Variables**: Set cache-related environment variables early
-  ```python
-  os.environ["HF_HOME"] = MODEL_CACHE
-  os.environ["TORCH_HOME"] = MODEL_CACHE
-  # etc.
-  ```
-
-- **Seed Management**: Provide a seed parameter and implement random seed generation
-  ```python
-  if seed is None:
-      seed = int.from_bytes(os.urandom(2), "big")
-  print(f"Using seed: {seed}")
-  ```
-
-- **Output Formats**: Support multiple output formats (webp, jpg, png) with quality controls
-  ```python
-  output_format: str = Input(
-      description="Format of the output image",
-      choices=["webp", "jpg", "png"],
-      default="webp"
-  )
-  output_quality: int = Input(
-      description="The image compression quality...",
-      ge=1, le=100, default=80
-  )
-  ```
-
-## Deploying to Replicate
-
-After setting up your model, you can push it to [Replicate](https://replicate.com):
-
-1. Create a new model on Replicate
-2. Push your model:
-   ```bash
-   cog push r8.im/username/model-name
-   ```
-
-## License
-
-MIT
+- **Image Search**: Create searchable image databases with text queries
+- **Content Recommendation**: Find similar content across text and images  
+- **Multimodal RAG**: Enhance retrieval systems with image understanding
+- **Content Moderation**: Analyze text and visual content together
+- **Cross-modal Retrieval**: Find images with text descriptions or vice versa
 
 ---
 
+## Model Attribution
+
+This model is based on [Jina AI's CLIP v2](https://huggingface.co/jinaai/jina-clip-v2). Please refer to their documentation for technical details and citation information.
+
 ---
 
-⭐ Star this on [GitHub](https://github.com/zsxkib/model-name)!
+⭐ Star this on [GitHub](https://github.com/zsxkib/cog-jinaai-jina-clip-v2)!
 
-👋 Follow `zsxkib` on [Twitter/X](https://twitter.com/zsakib_)
+👋 Follow `zsxkib` on [Twitter/X](https://twitter.com/zsakib_) | Built with ❤️ by [zsxkib](https://github.com/zsxkib)
